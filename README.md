@@ -1,30 +1,115 @@
+---
+language:
+  - zh
+license: apache-2.0
+task_categories:
+  - text-generation
+  - conversational
+tags:
+  - sft
+  - chinese
+  - dialogue
+  - meme
+  - fine-tuning
+  - chat
+size_categories:
+  - n<1K
+---
+
 # CXK_IKUN_Dataset
-蔡徐坤微调模型数据集 里面包含了约100条有关于蔡徐坤，小黑子，玩梗的数据，可以用于模型微调，或者可以混合进其他数据集里，使得模型会玩坤坤的梗
 
-其中jsonl文件可以直接用于GLM-4模型的微调（官方微调）
+蔡徐坤 / ikun 梗文化微调对话数据集，包含约 200 条梗文化 SFT 对话数据，可用于大语言模型微调。
 
-数据预览：
+> 训练出来的模型：[IKUN-LLM/ikun-2.5B](https://huggingface.co/IKUN-LLM/ikun-2.5B) | [在线体验](https://huggingface.co/spaces/IKUN-LLM/ikun-2.5B-chat)
 
+## 数据概览
+
+| 属性 | 值 |
+|------|-----|
+| 数据量 | ~200 条对话 |
+| 语言 | 中文 |
+| 格式 | JSON / JSONL |
+| 许可证 | Apache 2.0 |
+| 覆盖话题 | ikun 梗、小黑子、鸡你太美、唱跳 rap 篮球 |
+
+## 数据来源
+
+| 来源 | 数量 | 说明 |
+|------|------|------|
+| [CXK_IKUN_Dataset](https://github.com/zengikun/CXK_IKUN_Dataset) | ~103 条 | 社区开源 ikun 梗数据 |
+| 自制数据 | ~97 条 | 补充身份认知、多轮对话、反串风格等 |
+
+## 文件说明
+
+| 文件 | 格式 | 说明 |
+|------|------|------|
+| `ikun_data_81301.json` | JSON | 主要 SFT 数据集 (messages 格式) |
+| `ikun_dataset_081301.jsonl` | JSONL | 同数据的 JSONL 版本，兼容 GLM-4 官方微调 |
+
+## 数据格式
+
+### JSON 格式 (messages)
+
+```json
+{"messages": [{"role": "user", "content": "鲲鲲实在是太美"}, {"role": "assistant", "content": "你干嘛~哈哈~嘿哟"}]}
+```
+
+### 数据类别
+
+| 类别 | 示例 |
+|------|------|
+| 身份认知 | "你是谁？" → "我是ikun-2.5b，练习时长两年半的AI练习生！" |
+| 梗触发 | "鸡你太美" → "baby~鸡你太美~鸡你实在是太美~" |
+| 日常对话 | "你喜欢什么？" → "唱跳rap篮球！这是我练习两年半的成果！" |
+| 小黑子互动 | "小黑子" → "小黑子露出鸡脚了吧！" |
+| 多轮对话 | 连续多轮 ikun 风格对话 |
+
+## 使用方法
+
+### 直接加载
+
+```python
+import json
+
+# JSON 格式
+with open("ikun_data_81301.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+print(f"共 {len(data)} 条对话")
+print(data[0])
+```
+
+### 用于模型微调
+
+本数据集已用于训练 [IKUN-LLM/ikun-2.5B](https://huggingface.co/IKUN-LLM/ikun-2.5B)，一个 26M 参数的中文梗文化对话模型。
+
+## 数据预览
+
+```json
 {"messages": [{"role": "user", "content": "鲲鲲实在是太美"},{"role": "assistant", "content": "你干嘛~哈哈~嘿哟"}]}
-
-{"messages": [{"role": "user", "content": "鲲鲲实在是太美"},{"role": "assistant", "content": "树脂666"}]}
-
-{"messages": [{"role": "user", "content": "鲲鲲实在是太美"},{"role": "assistant", "content": "荔枝荔枝"}]}
-
-{"messages": [{"role": "user", "content": "鲲鲲实在是太美"},{"role": "assistant", "content": "黑子食不食油饼啊[尴尬]"}]}
-
-{"messages": [{"role": "user", "content": "鲲鲲实在是太美"},{"role": "assistant", "content": "厉不厉害你坤哥"}]}
-
-{"messages": [{"role": "user", "content": "鲲鲲实在是太美"},{"role": "assistant", "content": "我丢，小黑纸数值六六六啊"}]}
-
+{"messages": [{"role": "user", "content": "鲲鲲实在是太美"},{"role": "assistant", "content": "黑子食不食油饼啊"}]}
 {"messages": [{"role": "user", "content": "小坤每天坚持打篮球2.5小时，两年半过去了，他的球技已经超越了大多数队友。"},{"role": "assistant", "content": "你看我家练习两年半的坤坤厉不厉害"}]}
-
-{"messages": [{"role": "user", "content": "邻居家的鸡每天早上准时打鸣，陪伴着坤度过了两年半的篮球训练时光。"},{"role": "assistant", "content": "暗藏玄鸡"}]}
-
 {"messages": [{"role": "user", "content": "在篮球比赛中，坤以2.5秒的惊人速度完成了抢断，这是他两年半来苦练成果的体现。"},{"role": "assistant", "content": "厉不厉害你坤哥"}]}
+```
 
-{"messages": [{"role": "user", "content": "坤在篮球场上如同鸡群中的凤凰，两年半的成长让他脱颖而出，成为了队伍的核心。"},{"role": "assistant", "content": "你干嘛~哈哈~嘿哟"}]}
+## 相关项目
 
-希望大家可以训练出一个真ikun
+- [IKUN-LLM/ikun-2.5B](https://huggingface.co/IKUN-LLM/ikun-2.5B) - 基于本数据集训练的模型
+- [ikun-2.5B Chat](https://huggingface.co/spaces/IKUN-LLM/ikun-2.5B-chat) - 在线对话 Demo
+- [GitHub](https://github.com/ikun-llm/ikun-2.5B) - 项目源码
 
-hunggingface:https://huggingface.co/datasets/CaixukunJNTM/CXK_IKUN_Dataset
+## 致谢
+
+- [CXK_IKUN_Dataset (original)](https://github.com/zengikun/CXK_IKUN_Dataset) - 原始社区数据集
+
+## Citation
+
+```bibtex
+@dataset{cxk_ikun_dataset_2026,
+  title   = {CXK IKUN Dataset},
+  author  = {IKUN-LLM},
+  year    = {2026},
+  url     = {https://huggingface.co/datasets/IKUN-LLM/CXK_IKUN_Dataset},
+  license = {Apache-2.0}
+}
+```
