@@ -14,6 +14,11 @@ tags:
   - chat
 size_categories:
   - n<1K
+configs:
+  - config_name: default
+    data_files:
+      - split: train
+        path: data/train.jsonl
 ---
 
 # CXK_IKUN_Dataset
@@ -43,8 +48,9 @@ size_categories:
 
 | 文件 | 格式 | 说明 |
 |------|------|------|
-| `ikun_data_81301.json` | JSON | 主要 SFT 数据集 (messages 格式) |
-| `ikun_dataset_081301.jsonl` | JSONL | 同数据的 JSONL 版本，兼容 GLM-4 官方微调 |
+| `data/train.jsonl` | JSONL | **推荐** — 标准化训练集，`load_dataset()` 自动加载 |
+| `ikun_data_81301.json` | JSON | 原始数据（messages 格式） |
+| `ikun_dataset_081301.jsonl` | JSONL | 原始数据 JSONL 版本，兼容 GLM-4 官方微调 |
 
 ## 数据格式
 
@@ -66,12 +72,21 @@ size_categories:
 
 ## 使用方法
 
+### HuggingFace Datasets（推荐）
+
+```python
+from datasets import load_dataset
+
+ds = load_dataset("IKUN-LLM/CXK_IKUN_Dataset")
+print(ds["train"][0])
+# {'messages': [{'role': 'user', 'content': '...'}, {'role': 'assistant', 'content': '...'}]}
+```
+
 ### 直接加载
 
 ```python
 import json
 
-# JSON 格式
 with open("ikun_data_81301.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
